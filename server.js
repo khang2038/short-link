@@ -21,8 +21,6 @@ const shortCodeToUrl = new Map();
 const userShortsByUsername = new Map();
 
 // Config
-const DEFAULT_USER = process.env.DEFAULT_USER || 'admin@winners.media';
-const DEFAULT_PASS = process.env.DEFAULT_PASS || 'winners2025';
 const SESSION_SECRET = process.env.SESSION_SECRET || 'winners-media-secret';
 const BASE_URL = process.env.BASE_URL || `http://localhost:${PORT}`;
 
@@ -54,7 +52,7 @@ function ensureAuth(req, res, next) {
 // Auth endpoints
 app.post('/api/login', (req, res) => {
   const { username, password } = req.body || {};
-  if (username === DEFAULT_USER && password === DEFAULT_PASS) {
+  if (username === "admin@winners.media" && password === "winners2025") {
     req.session.user = { username };
     return res.json({ ok: true, user: { username } });
   }
