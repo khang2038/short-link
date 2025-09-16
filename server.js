@@ -4,7 +4,14 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const morgan = require('morgan');
 const path = require('path');
-const { nanoid } = require('nanoid');
+// nanoid is ESM-only in v5; load it dynamically in CommonJS
+let nanoidFn;
+async function getNanoid() {
+  if (!nanoidFn) {
+    ({ nanoid: nanoidFn } = await import('nanoid'));
+  }
+  return nanoidFn;
+}
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -68,7 +75,7 @@ app.get('/api/me', (req, res) => {
 });
 
 // Shorten URL
-app.post('/api/shorten', ensureAuth, (req, res) => {
+app.post('/api/shorten', ensureAuth, async (req, res) => {
   const { url, customCode } = req.body || {};
   try {
     if (!url) return res.status(400).json({ ok: false, error: 'URL_REQUIRED' });
@@ -90,6 +97,7 @@ app.post('/api/shorten', ensureAuth, (req, res) => {
       return res.status(409).json({ ok: false, error: 'CODE_TAKEN' });
     }
   } else {
+    const nanoid = await getNanoid();
     do {
       code = nanoid(7);
     } while (shortCodeToUrl.has(code));
