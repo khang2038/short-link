@@ -29,6 +29,13 @@ app.use(morgan('dev'));
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+// In some serverless environments, req.body may arrive as a string
+app.use((req, res, next) => {
+  if (typeof req.body === 'string') {
+    try { req.body = JSON.parse(req.body); } catch (e) {}
+  }
+  next();
+});
 app.use(
   session({
     secret: SESSION_SECRET,
@@ -52,7 +59,9 @@ function ensureAuth(req, res, next) {
 // Auth endpoints
 app.post('/api/login', (req, res) => {
   const { username, password } = req.body || {};
-  if (username === "admin@winners.media" && password === "winners2025") {
+  const u = typeof username === 'string' ? username.trim() : username;
+  const p = typeof password === 'string' ? password.trim() : password;
+  if (u === "admin@winners.media" && p === "winners2025") {
     req.session.user = { username };
     return res.json({ ok: true, user: { username } });
   }
