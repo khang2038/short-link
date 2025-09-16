@@ -41,3 +41,24 @@ npm start
 ```
 
 Lưu ý: Dữ liệu lưu trong RAM (Map). Khởi động lại sẽ mất dữ liệu.
+
+## Triển khai All-in-one trên Netlify
+
+Dự án đã cấu hình để chạy frontend (thư mục `public`) và backend (Express) trên Netlify Functions.
+
+1) Cài phụ thuộc serverless adapter (nếu chưa có):
+```bash
+npm install serverless-http
+```
+
+2) Kết nối repo với Netlify và thiết lập:
+- Build command: `npm run build`
+- Publish directory: `public`
+- Functions directory: `netlify/functions`
+
+3) Biến môi trường (tùy chọn):
+- `DEFAULT_USER`, `DEFAULT_PASS`, `SESSION_SECRET`, `BASE_URL`
+
+4) Sau khi deploy:
+- API dùng đường dẫn `/api/*` (được proxy vào function `app`).
+- Link rút gọn `/:code` được xử lý bởi function.
