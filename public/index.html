@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Winners Media - Rút gọn link</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <header class="wm-header">
+        <div class="container">
+          <div class="brand">
+            <div class="logo">WM</div>
+            <div class="title">
+              <h1>Winners Media</h1>
+              <p>Rút gọn link nhanh, nhẹ và mượt</p>
+            </div>
+          </div>
+          <nav id="auth-nav">
+            <button id="loginBtn" class="btn primary">Đăng nhập</button>
+            <button id="logoutBtn" class="btn ghost" style="display:none">Đăng xuất</button>
+          </nav>
+        </div>
+      </header>
+
+      <main class="container">
+        <section id="hero">
+          <h2>Biến link dài thành link ngắn đẹp</h2>
+          <p>Chỉ cần đăng nhập và dán liên kết, phần còn lại để em lo.</p>
+        </section>
+
+        <section id="login-card" class="card" style="display:none">
+          <h3>Đăng nhập</h3>
+          <form id="loginForm">
+            <div class="field">
+              <label>Email</label>
+              <input type="email" name="username" required />
+            </div>
+            <div class="field">
+              <label>Mật khẩu</label>
+              <input type="password" name="password" required />
+            </div>
+            <button class="btn primary" type="submit">Vào hệ thống</button>
+          </form>
+        </section>
+
+        <section id="shorten-card" class="card" style="display:none">
+          <h3>Rút gọn liên kết</h3>
+          <form id="shortenForm">
+            <div class="field">
+              <label>Liên kết gốc</label>
+              <input type="url" name="url" placeholder="https://..." required />
+            </div>
+            <div class="field inline">
+              <div>
+                <label>Mã tuỳ chọn (không bắt buộc)</label>
+                <input type="text" name="customCode" placeholder="vd: winners" />
+              </div>
+              <button class="btn primary" type="submit">Rút gọn</button>
+            </div>
+          </form>
+          <div id="result" class="result" style="display:none"></div>
+        </section>
+
+        <section id="my-urls" class="card" style="display:none">
+          <h3>Liên kết của tôi</h3>
+          <div id="list"></div>
+        </section>
+      </main>
+
+      <footer class="wm-footer">
+        <div class="container">
+          <p>© <span id="year"></span> Winners Media. All rights reserved.</p>
+        </div>
+      </footer>
+    </div>
+
+    <script src="/main.js"></script>
+  </body>
+  </html>
+
+
