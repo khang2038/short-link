@@ -135,11 +135,6 @@ app.get(/.*/, (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// Only start the server when running directly (not in serverless environments)
-if (require.main === module) {
-  app.listen(PORT, () => {
-    console.log(`Winners Media shortener running on ${BASE_URL}`);
-  });
-}
-
-module.exports = app;
+app.listen(PORT, () => {
+  console.log(`Winners Media shortener running on ${BASE_URL}`);
+});
