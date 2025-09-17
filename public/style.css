@@ -36,6 +36,13 @@ input:focus{border-color:var(--brand)}
 .item .meta{display:flex;flex-direction:column;font-size:14px}
 .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;color:#bfe4ff}
 
+/* Fix long URL overflow in "Liên kết của tôi" */
+.item{gap:12px}
+.item .meta{flex:1;min-width:0}
+.item .meta span{display:block}
+.item .btn{flex-shrink:0}
+.mono{word-break:break-all;overflow-wrap:anywhere}
+
 .wm-footer{border-top:1px solid var(--border);margin-top:30px}
 .wm-footer .container{padding:20px;color:var(--muted);font-size:13px;display:flex;justify-content:center}
 
