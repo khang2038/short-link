@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const morgan = require('morgan');
 const path = require('path');
+const fs = require('fs');
 // nanoid is ESM-only in v5; load it dynamically in CommonJS
 let nanoidFn;
 async function getNanoid() {
@@ -16,9 +17,47 @@ async function getNanoid() {
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// In-memory stores (simple, for demo)
+// In-memory stores with simple file persistence
+const DATA_DIR = path.join(__dirname, 'data');
+const DATA_FILE = path.join(DATA_DIR, 'db.json');
 const shortCodeToUrl = new Map();
 const userShortsByUsername = new Map();
+
+function ensureDataDir(){
+  try{ fs.mkdirSync(DATA_DIR,{recursive:true}); }catch(e){}
+}
+
+function loadFromDisk(){
+  try{
+    if(fs.existsSync(DATA_FILE)){
+      const raw = fs.readFileSync(DATA_FILE,'utf8');
+      const json = JSON.parse(raw||'{}');
+      const mapEntries = json.shortCodeToUrl || [];
+      const userEntries = json.userShortsByUsername || [];
+      for(const [code, val] of mapEntries){
+        shortCodeToUrl.set(code, val);
+      }
+      for(const [user, list] of userEntries){
+        userShortsByUsername.set(user, list);
+      }
+    }
+  }catch(e){
+    console.error('Failed to load data file:', e);
+  }
+}
+
+function saveToDisk(){
+  try{
+    ensureDataDir();
+    const payload = {
+      shortCodeToUrl: Array.from(shortCodeToUrl.entries()),
+      userShortsByUsername: Array.from(userShortsByUsername.entries()),
+    };
+    fs.writeFileSync(DATA_FILE, JSON.stringify(payload, null, 2), 'utf8');
+  }catch(e){
+    console.error('Failed to save data file:', e);
+  }
+}
 
 // Config
 const DEFAULT_USER = process.env.DEFAULT_USER || 'admin@winners.media';
@@ -45,6 +84,9 @@ app.use(
 
 // Serve static frontend
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Load data on startup
+loadFromDisk();
 
 function ensureAuth(req, res, next) {
   if (req.session && req.session.user) return next();
@@ -109,6 +151,9 @@ app.post('/api/shorten', ensureAuth, async (req, res) => {
   const list = userShortsByUsername.get(userKey) || [];
   list.unshift({ code, url, shortUrl: `${BASE_URL}/${code}`, createdAt: Date.now() });
   userShortsByUsername.set(userKey, list);
+
+  // persist
+  saveToDisk();
 
   return res.json({ ok: true, code, shortUrl: `${BASE_URL}/${code}` });
 });

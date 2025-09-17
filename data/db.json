@@ -1,0 +1,25 @@
+{
+  "shortCodeToUrl": [
+    [
+      "4EKjDRL",
+      {
+        "url": "https://nflinsight360.com/posts/how-to-watch-san-francisco-49ers-at-arizona-cardinals-tv-channel-and-streaming-options-for-september-21-cub-cubui/#google_vignette",
+        "createdAt": 1758100629630,
+        "createdBy": "admin@winners.media"
+      }
+    ]
+  ],
+  "userShortsByUsername": [
+    [
+      "admin@winners.media",
+      [
+        {
+          "code": "4EKjDRL",
+          "url": "https://nflinsight360.com/posts/how-to-watch-san-francisco-49ers-at-arizona-cardinals-tv-channel-and-streaming-options-for-september-21-cub-cubui/#google_vignette",
+          "shortUrl": "http://localhost:3000/4EKjDRL",
+          "createdAt": 1758100629630
+        }
+      ]
+    ]
+  ]
+}
