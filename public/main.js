@@ -49,12 +49,22 @@ $('#loginForm')?.addEventListener('submit', async (e)=>{
   const form = e.target;
   const username = form.username.value.trim();
   const password = form.password.value;
+  const remember = form.remember?.checked;
   const res = await fetch('/api/login',{
     method:'POST',
     headers:{'Content-Type':'application/json'},
     body: JSON.stringify({username,password})
   });
   if(res.ok){
+    try{
+      if(remember){
+        localStorage.setItem('wm_saved_username', username);
+        localStorage.setItem('wm_saved_password', password);
+      }else{
+        localStorage.removeItem('wm_saved_username');
+        localStorage.removeItem('wm_saved_password');
+      }
+    }catch(err){}
     setAuthUI(true);
     loginCard.style.display='none';
   }else{
@@ -113,6 +123,18 @@ async function loadMyUrls(){
 (async function init(){
   const me = await getMe();
   setAuthUI(!!me);
+  try{
+    const saved = localStorage.getItem('wm_saved_username');
+    const savedPw = localStorage.getItem('wm_saved_password');
+    if(saved && document.querySelector('#loginForm input[name="username"]')){
+      document.querySelector('#loginForm input[name="username"]').value = saved;
+      const rememberInput = document.querySelector('#loginForm input[name="remember"]');
+      if(rememberInput) rememberInput.checked = true;
+    }
+    if(savedPw && document.querySelector('#loginForm input[name="password"]')){
+      document.querySelector('#loginForm input[name="password"]').value = savedPw;
+    }
+  }catch(err){}
 })();
 
 
